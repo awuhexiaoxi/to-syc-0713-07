@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>生日快乐！</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff69b4;
+      margin-top: 30px;
+      font-size: 3em;
+      font-family: SimSun, serif;
+      text-shadow: 2px 2px 4px #fff;
+    }
+
+    .subtext {
+      text-align: center;
+      color: #ff99cc;
+      margin-top: -10px;
+      font-size: 1.2em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      max-width: 600px;
+      margin: 50px auto;
+    }
+
+    .gift-box {
+      width: 100%;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      border-radius: 20px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .modal-content img,
+    .modal-content video,
+    .modal-content audio {
+      width: 100%;
+      max-height: 80vh;
+    }
+
+    .close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .envelope {
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .hidden-card {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .final-note {
+      font-family: 'Comic Sans MS', cursive;
+      color: black;
+      margin-top: 5px;
+      text-align: center;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <!-- 背景音乐 -->
+  <audio id="bgm" autoplay loop>
+    <source src="music1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <h1>🎉 生日快乐！🎉</h1>
+  <p class="subtext">祝孙老师22岁生日快乐！！🎂</p>
+
+  <div class="grid">
+    <!-- 礼物1 -->
+    <img class="gift-box" src="giftbox1.png" onclick="showModal('gift1.jpg')" />
+
+    <!-- 礼物2 -->
+    <img class="gift-box" src="giftbox2.png" onclick="openExternalVideo()" />
+
+    <!-- 礼物3 -->
+    <img class="gift-box" src="giftbox3.png" onclick="showModal('gift2.jpg')" />
+
+    <!-- 礼物4：播放音频 -->
+    <img class="gift-box" src="giftbox4.png" onclick="showAudio('https://cdn.jsdelivr.net/gh/awuhexiaoxi/birthday-assets/record1.mp3')" />
+
+    <!-- 礼物5：信封 -->
+    <img class="gift-box" src="giftbox5.png" onclick="showEnvelope()" />
+
+    <!-- 礼物6 -->
+    <div style="text-align: center;">
+      <img class="gift-box" src="giftbox6.png" onclick="showLinkImage()" />
+      <p class="final-note">最后打开这个哦~ 🎉</p>
+    </div>
+  </div>
+
+  <!-- 弹窗 -->
+  <div id="modal" class="modal" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent">
+      <span class="close" onclick="closeModal(event)">×</span>
+    </div>
+  </div>
+
+  <script>
+    // 调低背景音乐音量
+    document.addEventListener("DOMContentLoaded", function () {
+      const bgm = document.getElementById("bgm");
+      if (bgm) bgm.volume = 0.2;
+    });
+
+    function showModal(contentSrc) {
+      const modal = document.getElementById("modal");
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = '<span class="close" onclick="closeModal(event)">×</span>' +
+        '<img src="' + contentSrc + '" alt="gift" />';
+      modal.style.display = "flex";
+    }
+
+    function showAudio(audioSrc) {
+      const modal = document.getElementById("modal");
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = `
+        <span class="close" onclick="closeModal(event)">×</span>
+        <audio controls autoplay>
+          <source src="${audioSrc}" type="audio/mpeg">
+          您的浏览器不支持音频播放
+        </audio>
+      `;
+      modal.style.display = "flex";
+    }
+
+    function showEnvelope() {
+      const modal = document.getElementById("modal");
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = `
+        <span class="close" onclick="closeModal(event)">×</span>
+        <img src="envelope.png" class="envelope" onclick="openCard()" />
+        <img src="gift3.jpg" class="hidden-card" id="cardImage" />
+      `;
+      modal.style.display = "flex";
+    }
+
+    function openCard() {
+      document.getElementById("cardImage").style.display = "block";
+    }
+
+    function showLinkImage() {
+      const modal = document.getElementById("modal");
+      const modalContent = document.getElementById("modalContent");
+      modalContent.innerHTML = '<span class="close" onclick="closeModal(event)">×</span>' +
+        '<a href="weixin://dl/business/?t=SFl382d3zkg"><img src="gift6.jpg" alt="link image" /></a>';
+      modal.style.display = "flex";
+    }
+
+    function openExternalVideo() {
+      window.open("https://www.xiaohongshu.com/explore/680442a6000000000b017832?xsec_token=AB5ituMS7Ogzs8zGh50Dlxyfg37NKLer7Z87xcJgDPtY0=&xsec_source=pc_collect", "_blank");
+    }
+
+    function closeModal(event) {
+      if (event.target.id === "modal" || event.target.className === "close") {
+        document.getElementById("modal").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
